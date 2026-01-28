@@ -21,6 +21,10 @@ let playerPos = { x: 1, y: 1 };
 let steps = 0;
 let gemsFound = 0;
 const totalGems = 3;
+let isMoving = false; // 防止滑動中重複輸入的鎖定開關
+
+// 延遲函數
+const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 function drawMaze() {
     const mazeElement = document.getElementById('maze');
@@ -35,7 +39,6 @@ function drawMaze() {
             const cell = document.createElement('div');
             cell.className = 'cell';
 
-            // 漸層迷霧邏輯
             const dist = Math.sqrt(Math.pow(x - playerPos.x, 2) + Math.pow(y - playerPos.y, 2));
             const maxViewDistance = 4.5;
             let opacity = 1 - (dist / maxViewDistance);
@@ -57,7 +60,10 @@ function drawMaze() {
     }
 }
 
-function handleMove(key) {
+// 核心移動邏輯（非同步版本）
+async function handleMove(key) {
+    if (isMoving) return; // 如果正在滑動，不接受新指令
+
     let dx = 0, dy = 0;
     if (key === 'ArrowUp') dy = -1;
     else if (key === 'ArrowDown') dy = 1;
@@ -65,28 +71,28 @@ function handleMove(key) {
     else if (key === 'ArrowRight') dx = 1;
     else return;
 
-    let nextX = playerPos.x;
-    let nextY = playerPos.y;
     let moved = false;
+    isMoving = true; // 開啟鎖定
 
-    // 滑動邏輯
-    while (mazeData[nextY + dy] && mazeData[nextY + dy][nextX + dx] !== 1) {
-        nextX += dx;
-        nextY += dy;
+    // 滑動動畫邏輯
+    while (mazeData[playerPos.y + dy] && mazeData[playerPos.y + dy][playerPos.x + dx] !== 1) {
+        playerPos.x += dx;
+        playerPos.y += dy;
         moved = true;
 
-        if (mazeData[nextY][nextX] === 3) {
-            mazeData[nextY][nextX] = 0;
+        if (mazeData[playerPos.y][playerPos.x] === 3) {
+            mazeData[playerPos.y][playerPos.x] = 0;
             gemsFound++;
         }
-        if (mazeData[nextY][nextX] === 2) break;
+
+        drawMaze(); // 每走一格就重畫一次迷霧和角色
+        await sleep(40); // 滑行速度，數值越小越快
+
+        if (mazeData[playerPos.y][playerPos.x] === 2) break;
     }
 
     if (moved) {
         steps++;
-        playerPos.x = nextX;
-        playerPos.y = nextY;
-
         const mazeElement = document.getElementById('maze');
         if (mazeElement) {
             mazeElement.classList.remove('shake-effect');
@@ -107,31 +113,29 @@ function handleMove(key) {
             }
         }
     }
+    
+    isMoving = false; // 移動結束，解鎖
 }
 
-function moveByButton(direction) {
+// 修改按鈕呼叫，支援非同步
+async function moveByButton(direction) {
+    if (isMoving) return;
     const keyMap = {
         'up': 'ArrowUp',
         'down': 'ArrowDown',
         'left': 'ArrowLeft',
         'right': 'ArrowRight'
     };
-    handleMove(keyMap[direction]);
+    await handleMove(keyMap[direction]);
 }
 
-// --- 修改後的鍵盤監聽部分 ---
 window.addEventListener('keydown', (e) => {
-    // 如果按下的是 r 或 R，直接重新整理網頁
     if (e.key === 'r' || e.key === 'R') {
         location.reload();
         return;
     }
-    
-    // 原本的移動邏輯
     handleMove(e.key);
 });
 
-// 確保你的 drawMaze() 和 handleMove() 函數保持不變
 drawMaze();
-
 console.log("%c 冒險者，按下 R 鍵可以重塑時空...", "color: #ff4444; font-style: italic;");
