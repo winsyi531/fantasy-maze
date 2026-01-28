@@ -131,10 +131,20 @@ async function submitScore() {
     const name = document.getElementById('player-name').value;
     if (!name) return alert("請輸入冒險者 ID！");
     
-    // 這裡將來放置 Firebase add 資料的代碼
-    console.log(`正在上傳成績... 名稱: ${name}, 步數: ${steps}`);
-    alert(`${name}，你的傳奇已被記錄！（目前為本地模擬，請等待 Firebase 串接）`);
-    location.reload(); 
+    try {
+        // 將成績儲存在雲端資料庫中名為 "leaderboard" 的集合裡
+        await db.collection("leaderboard").add({
+            name: name,
+            steps: steps,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp() // 使用伺服器時間
+        });
+        
+        alert(`傳奇已載入石碑！冒險者 ${name}，後會有期。`);
+        location.reload(); 
+    } catch (error) {
+        console.error("資料上傳失敗：", error);
+        alert("時空震盪（上傳失敗），請稍後再試。");
+    }
 }
 
 window.addEventListener('keydown', (e) => {
