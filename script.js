@@ -1,5 +1,9 @@
 // 初始化關卡：優先讀取進度，若無則為 0
 let currentLevel = parseInt(localStorage.getItem('mazeCurrentLevel')) || 0;
+
+// 防止關卡資料尚未讀取到 levels 就報錯 (配合 maps.js)
+if (typeof levels !== 'undefined' && !levels[currentLevel]) currentLevel = 0;
+
 let mazeData = JSON.parse(JSON.stringify(levels[currentLevel]));
 
 let playerPos = { x: 1, y: 1 };
@@ -93,16 +97,39 @@ async function handleMove(key) {
     else return;
 
     isMoving = true;
+
+    // --- 啟用殘影特效 ---
+    let playerElement = document.querySelector('.player-active');
+    if (playerElement) playerElement.classList.add('player-sliding');
+
     while (mazeData[playerPos.y + dy] && mazeData[playerPos.y + dy][playerPos.x + dx] !== 1) {
-        playerPos.x += dx; playerPos.y += dy;
-        if (mazeData[playerPos.y][playerPos.x] === 3) { mazeData[playerPos.y][playerPos.x] = 0; gemsFound++; }
+        playerPos.x += dx; 
+        playerPos.y += dy;
+        if (mazeData[playerPos.y][playerPos.x] === 3) { 
+            mazeData[playerPos.y][playerPos.x] = 0; 
+            gemsFound++; 
+        }
         drawMaze();
+
+        // 重新抓取元素，因為 drawMaze 可能重繪了 DOM
+        playerElement = document.querySelector('.player-active');
+        if (playerElement) playerElement.classList.add('player-sliding');
+
         await sleep(30); 
         if (mazeData[playerPos.y][playerPos.x] === 2) break;
     }
+
+    // --- 移除殘影特效 ---
+    playerElement = document.querySelector('.player-active');
+    if (playerElement) playerElement.classList.remove('player-sliding');
+
     steps++;
     const mazeElement = document.getElementById('maze');
-    if (mazeElement) { mazeElement.classList.remove('shake-effect'); void mazeElement.offsetWidth; mazeElement.classList.add('shake-effect'); }
+    if (mazeElement) { 
+        mazeElement.classList.remove('shake-effect'); 
+        void mazeElement.offsetWidth; 
+        mazeElement.classList.add('shake-effect'); 
+    }
     drawMaze();
 
     if (mazeData[playerPos.y][playerPos.x] === 2) {
@@ -166,5 +193,6 @@ async function loadLeaderboard() {
     } catch (error) { scoreList.innerHTML = '<li>讀取失敗</li>'; }
 }
 
+// 啟動遊戲
 drawMaze();
 loadLeaderboard();
