@@ -13,22 +13,25 @@ let playerPos = { x: 1, y: 1 }; // 「我」的起始位置
 
 function drawMaze() {
     const mazeElement = document.getElementById('maze');
-    let html = '';
+    mazeElement.innerHTML = ''; // 清空內容
+
     for (let y = 0; y < mazeData.length; y++) {
         for (let x = 0; x < mazeData[y].length; x++) {
+            const cell = document.createElement('div'); // 每一格都是一個 div
+            
             if (x === playerPos.x && y === playerPos.y) {
-                html += '<span style="color: #ffeb3b; font-weight: bold;">我</span>';
+                cell.innerHTML = '<span style="color: #ffeb3b; font-weight: bold;">我</span>';
             } else if (mazeData[y][x] === 1) {
-                html += '牆';
+                cell.textContent = '牆';
             } else if (mazeData[y][x] === 2) {
-                html += '<span style="color: #ff5722;">門</span>';
+                cell.innerHTML = '<span style="color: #ff5722;">門</span>';
             } else {
-                html += '&nbsp;&nbsp;'; // 空地
+                cell.textContent = ''; // 空地不需要放空格，Grid 會撐開
             }
+            
+            mazeElement.appendChild(cell);
         }
-        html += '<br>';
     }
-    mazeElement.innerHTML = html;
 }
 
 window.addEventListener('keydown', (e) => {
