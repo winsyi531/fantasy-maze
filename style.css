@@ -1,20 +1,35 @@
-#maze {
-    display: inline-grid; /* 關鍵：改用網格佈局 */
-    /* 假設你的迷宮橫向有 10 格，每格固定 40px */
-    grid-template-columns: repeat(10, 40px); 
-    background: #1a1a1a;
-    padding: 20px;
-    border: 2px solid #555;
-    font-size: 24px;
-    text-align: center;
-}
-
-/* 讓每一格內的內容（牆、我、門）都居中對齊 */
-#maze div {
-    width: 40px;
-    height: 40px;
-    line-height: 40px;
+body {
+    background-color: #2c2c2c;
+    color: #ffffff;
     display: flex;
+    flex-direction: column; /* 讓訊息排在下面 */
     justify-content: center;
     align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: "Microsoft JhengHei", monospace;
+}
+
+#maze {
+    display: grid;
+    /* 這裡假設你的地圖橫向有 10 格，每格固定 40px */
+    grid-template-columns: repeat(10, 40px); 
+    gap: 0; /* 確保格子之間沒有間隙 */
+    background: #1a1a1a;
+    padding: 10px;
+    border: 2px solid #555;
+}
+
+/* 每一格的樣式 */
+.cell {
+    width: 40px;
+    height: 40px;
+    line-height: 40px; /* 讓文字垂直居中 */
+    text-align: center;
+    font-size: 24px;
+}
+
+#message {
+    margin-top: 20px;
+    color: #aaa;
 }
