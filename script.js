@@ -86,7 +86,7 @@ async function handleMove(key) {
         }
 
         drawMaze(); // 每走一格就重畫一次迷霧和角色
-        await sleep(40); // 滑行速度，數值越小越快
+        await sleep(30); // 滑行速度，數值越小越快
 
         if (mazeData[playerPos.y][playerPos.x] === 2) break;
     }
