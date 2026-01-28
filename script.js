@@ -25,11 +25,7 @@ const totalGems = 3;
 function drawMaze() {
     const mazeElement = document.getElementById('maze');
     mazeElement.innerHTML = '';
-    // 在 drawMaze 的迴圈內
-    const distance = Math.sqrt(Math.pow(x - playerPos.x, 2) + Math.pow(y - playerPos.y, 2));
-    if (distance < 3.5) { // 照亮周圍 3.5 格的範圍
-        cell.classList.add('visible');
-    }
+
     // 更新上方看板
     document.getElementById('step-count').textContent = steps;
     document.getElementById('gem-count').textContent = gemsFound;
@@ -40,7 +36,7 @@ function drawMaze() {
             cell.className = 'cell';
 
             if (x === playerPos.x && y === playerPos.y) {
-                cell.innerHTML = '<span class="player-active" style="color: #ffeb3b;">我</span>';
+                cell.innerHTML = '<span style="color: #ffeb3b;">我</span>';
             } else if (mazeData[y][x] === 1) {
                 cell.textContent = '牆';
             } else if (mazeData[y][x] === 2) {
@@ -86,16 +82,9 @@ window.addEventListener('keydown', (e) => {
     }
 
     if (moved) {
-        steps++;
+        steps++; // 只要有移動，步數就 +1
         playerPos.x = nextX;
         playerPos.y = nextY;
-        
-        // 觸發震動
-        const mazeElement = document.getElementById('maze');
-        mazeElement.classList.remove('shake-effect');
-        void mazeElement.offsetWidth; // 重新啟動動畫的技巧
-        mazeElement.classList.add('shake-effect');
-        
         drawMaze();
     }
 
