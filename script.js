@@ -158,3 +158,42 @@ window.addEventListener('keydown', (e) => {
 // 初始化
 drawMaze();
 console.log("%c 冒險者，按下 R 鍵可以重塑時空...", "color: #ff4444; font-style: italic;");
+
+// --- 自動抓取排行榜資料 ---
+async function loadLeaderboard() {
+    const scoreList = document.getElementById('score-list');
+    if (!scoreList) return;
+
+    try {
+        // 從雲端抓取 "leaderboard" 集合，並依步數由少到多排序，只取前 5 名
+        const snapshot = await db.collection("leaderboard")
+            .orderBy("steps", "asc")
+            .limit(5)
+            .get();
+
+        // 如果資料庫是空的
+        if (snapshot.empty) {
+            scoreList.innerHTML = '<li>尚無探險家留下紀錄</li>';
+            return;
+        }
+
+        // 清空原本的「載入中...」文字
+        scoreList.innerHTML = '';
+
+        // 將抓到的資料每一筆都做成一個 <li> 標籤
+        snapshot.forEach(doc => {
+            const data = doc.data();
+            const li = document.createElement('li');
+            li.style.padding = "5px 0";
+            li.style.borderBottom = "1px ridge #333";
+            li.innerHTML = `<span style="color: #00e5ff;">${data.name}</span> - ${data.steps} 步`;
+            scoreList.appendChild(li);
+        });
+    } catch (error) {
+        console.error("抓取排行榜失敗：", error);
+        scoreList.innerHTML = '<li>石碑文字模糊不清（讀取失敗）</li>';
+    }
+}
+
+// 在網頁一啟動時就執行一次
+loadLeaderboard();
