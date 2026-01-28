@@ -33,15 +33,21 @@ function drawMaze() {
             const cell = document.createElement('div');
             cell.className = 'cell';
 
-            // --- 特效: 戰爭迷霧計算 ---
-            // 計算格子與玩家的距離
+            // --- 漸層迷霧核心邏輯 ---
             const dist = Math.sqrt(Math.pow(x - playerPos.x, 2) + Math.pow(y - playerPos.y, 2));
-            if (dist < 3.5) { // 視線範圍設為 3.5 格
-                cell.classList.add('visible');
-            }
+            const maxViewDistance = 4.5; // 最大視距，超過就全黑
+            
+            // 計算透明度：距離越近越接近 1，超過視距則為 0
+            // 公式：1 - (當前距離 / 最大視距)，並限制在 0 ~ 1 之間
+            let opacity = 1 - (dist / maxViewDistance);
+            if (opacity < 0) opacity = 0;
+            
+            // 套用動態透明度
+            cell.style.opacity = opacity;
 
             if (x === playerPos.x && y === playerPos.y) {
                 cell.innerHTML = '<span class="player-active">我</span>';
+                cell.style.opacity = 1; // 角色本人永遠最亮
             } else if (mazeData[y][x] === 1) {
                 cell.textContent = '牆';
             } else if (mazeData[y][x] === 2) {
