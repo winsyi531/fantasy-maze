@@ -8,8 +8,12 @@
 </head>
 <body>
     <div id="main-layout">
-        
         <div id="side-panel">
+            <div id="pc-level-nav" class="level-nav">
+                <button onclick="changeLevel(-1)">上一個關卡</button>
+                <button onclick="changeLevel(1)">下一個關卡</button>
+            </div>
+
             <div id="leaderboard-section">
                 <div id="high-scores">
                     <h4>🏆 英雄榜 (Top 5)</h4>
@@ -28,6 +32,11 @@
         </div>
 
         <div id="game-container">
+            <div id="mobile-level-nav" class="level-nav">
+                <button onclick="changeLevel(-1)">上一關</button>
+                <button onclick="changeLevel(1)">下一關</button>
+            </div>
+
             <div id="status-board">
                 <div id="level-title" style="color: #ffeb3b; font-weight: bold; margin-bottom: 5px;">第 1 關</div>
                 步數: <span id="step-count">0</span> | 寶物: <span id="gem-count">0</span>/3
@@ -37,7 +46,7 @@
 
             <div id="controls">
                 <div class="control-row">
-                    <button class="ctrl-btn reset-btn" onclick="location.reload()">R</button>
+                    <button class="ctrl-btn reset-btn" onclick="resetCurrentLevel()">R</button>
                     <button class="ctrl-btn" onclick="moveByButton('up')">上</button>
                     <div class="ctrl-btn placeholder"></div>
                 </div>
