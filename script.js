@@ -58,7 +58,7 @@ function drawMaze() {
             } else if (mazeData[y][x] === 1) {
                 cell.textContent = '牆';
             } else if (mazeData[y][x] === 2) {
-                cell.innerHTML = '<span style="color: #ff5722;">門</span>';
+                cell.innerHTML = '<span class="door-glow">門</span>';
             } else if (mazeData[y][x] === 3) {
                 cell.innerHTML = '<span class="gem">寶</span>';
             }
