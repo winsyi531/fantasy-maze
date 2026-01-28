@@ -23,6 +23,7 @@ const totalGems = 3;
 
 function drawMaze() {
     const mazeElement = document.getElementById('maze');
+    if (!mazeElement) return;
     mazeElement.innerHTML = '';
 
     document.getElementById('step-count').textContent = steps;
@@ -33,7 +34,6 @@ function drawMaze() {
             const cell = document.createElement('div');
             cell.className = 'cell';
 
-            // --- 漸層迷霧核心邏輯 ---
             const dist = Math.sqrt(Math.pow(x - playerPos.x, 2) + Math.pow(y - playerPos.y, 2));
             const maxViewDistance = 4.5;
             let opacity = 1 - (dist / maxViewDistance);
@@ -55,7 +55,6 @@ function drawMaze() {
     }
 }
 
-// 核心移動邏輯函數
 function handleMove(key) {
     let dx = 0, dy = 0;
     if (key === 'ArrowUp') dy = -1;
@@ -68,11 +67,55 @@ function handleMove(key) {
     let nextY = playerPos.y;
     let moved = false;
 
-    // 滑動邏輯
     while (mazeData[nextY + dy] && mazeData[nextY + dy][nextX + dx] !== 1) {
         nextX += dx;
         nextY += dy;
         moved = true;
 
         if (mazeData[nextY][nextX] === 3) {
-            mazeData[nextY][next
+            mazeData[nextY][nextX] = 0;
+            gemsFound++;
+        }
+        if (mazeData[nextY][nextX] === 2) break;
+    }
+
+    if (moved) {
+        steps++;
+        playerPos.x = nextX;
+        playerPos.y = nextY;
+
+        const mazeElement = document.getElementById('maze');
+        mazeElement.classList.remove('shake-effect');
+        void mazeElement.offsetWidth; 
+        mazeElement.classList.add('shake-effect');
+
+        drawMaze();
+
+        if (mazeData[playerPos.y][playerPos.x] === 2) {
+            if (gemsFound < totalGems) {
+                alert(`你還沒集齊所有寶物！（目前：${gemsFound}/${totalGems}）`);
+            } else {
+                setTimeout(() => {
+                    alert(`恭喜！你用了 ${steps} 步逃出迷宮！`);
+                    location.reload();
+                }, 100);
+            }
+        }
+    }
+}
+
+function moveByButton(direction) {
+    const keyMap = {
+        'up': 'ArrowUp',
+        'down': 'ArrowDown',
+        'left': 'ArrowLeft',
+        'right': 'ArrowRight'
+    };
+    handleMove(keyMap[direction]);
+}
+
+window.addEventListener('keydown', (e) => {
+    handleMove(e.key);
+});
+
+drawMaze();
