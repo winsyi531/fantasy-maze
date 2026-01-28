@@ -1,4 +1,4 @@
-/* --- 基礎佈局 --- */
+/* --- 基礎佈局修正 --- */
 body {
     background-color: #2c2c2c;
     color: #ffffff;
@@ -8,18 +8,20 @@ body {
     min-height: 100vh;
     margin: 0;
     font-family: "monospace";
-    /* 移除 overflow: hidden; 改用 auto，確保手機可以上下滑動看排行榜 */
+    /* 允許垂直捲動，防止內容被切掉 */
     overflow-x: hidden; 
     overflow-y: auto;
 }
 
 #main-layout {
     display: flex;
-    flex-direction: row; /* 電腦預設左右並排 */
+    flex-direction: row;
     align-items: flex-start;
     gap: 40px;
     padding: 20px;
-    max-width: 100vw;
+    /* 確保容器不會撐破螢幕 */
+    max-width: 100%;
+    box-sizing: border-box; 
 }
 
 /* 左側側邊欄 */
@@ -31,25 +33,29 @@ body {
     border: 1px solid #444;
 }
 
-/* --- 關鍵修改：手機版自動適應 --- */
+/* --- 手機版適應 --- */
 @media (max-width: 850px) {
     #main-layout {
-        flex-direction: column; /* 螢幕窄時，改為上下排列 */
-        align-items: center;    /* 置中 */
-        gap: 20px;
-    }
-
-    #side-panel {
-        width: 90%; /* 手機上讓排行榜寬一點，好閱讀 */
-        order: 2;   /* 讓排行榜排在迷宮下方，這樣一進網頁先看到遊戲 */
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+        /* 給予左右邊界各 15px 的間距 */
+        padding: 20px 15px; 
     }
 
     #game-container {
-        order: 1;   /* 迷宮優先顯示 */
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        order: 1;
     }
-    
-    body {
-        height: auto; /* 手機版內容變長了，取消 100vh 的限制 */
+
+    #side-panel {
+        width: 100%;
+        max-width: 400px; /* 限制排行榜不要太寬 */
+        box-sizing: border-box;
+        order: 2;
     }
 }
 
@@ -118,8 +124,10 @@ body {
     border: 1px solid #666;
 }
 
+/* --- 迷宮容器修正 --- */
 #maze {
     display: grid;
+    /* 保持 15 列，每列 30px */
     grid-template-columns: repeat(15, 30px); 
     grid-auto-rows: 30px; 
     gap: 0;
@@ -127,6 +135,13 @@ body {
     padding: 10px;
     border: 2px solid #555;
     position: relative;
+    
+    /* 關鍵：水平置中 */
+    margin: 0 auto; 
+    
+    /* 手機縮放優化：如果螢幕太窄，就縮小迷宮 */
+    max-width: calc(100vw - 40px); 
+    overflow-x: auto; 
 }
 
 /* 特效與按鈕 (保持你原本的設定) */
