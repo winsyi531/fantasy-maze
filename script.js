@@ -21,9 +21,9 @@ let playerPos = { x: 1, y: 1 };
 let steps = 0;
 let gemsFound = 0;
 const totalGems = 3;
-let isMoving = false; // 防止滑動中重複輸入的鎖定開關
+let isMoving = false; // 動作鎖定
+let hasFinished = false; // 是否已達終點
 
-// 延遲函數
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 function drawMaze() {
@@ -39,16 +39,15 @@ function drawMaze() {
             const cell = document.createElement('div');
             cell.className = 'cell';
 
+            // 漸層迷霧邏輯
             const dist = Math.sqrt(Math.pow(x - playerPos.x, 2) + Math.pow(y - playerPos.y, 2));
             const maxViewDistance = 4.5;
-            
-            // --- 修改後的透明度邏輯 ---
             let opacity = 1 - (dist / maxViewDistance);
             if (opacity < 0) opacity = 0;
 
-            // 特殊處理：如果是「寶」，且目前在迷霧中（opacity 為 0），給它 0.15 的微光
+            // 寶物微光處理：在黑暗中保持 0.15 的可見度
             if (mazeData[y][x] === 3 && opacity < 0.15) {
-                opacity = 0.15; 
+                opacity = 0.15;
             }
             
             cell.style.opacity = opacity;
@@ -68,9 +67,8 @@ function drawMaze() {
     }
 }
 
-// 核心移動邏輯（非同步版本）
 async function handleMove(key) {
-    if (isMoving) return; // 如果正在滑動，不接受新指令
+    if (isMoving || hasFinished) return; 
 
     let dx = 0, dy = 0;
     if (key === 'ArrowUp') dy = -1;
@@ -80,9 +78,8 @@ async function handleMove(key) {
     else return;
 
     let moved = false;
-    isMoving = true; // 開啟鎖定
+    isMoving = true;
 
-    // 滑動動畫邏輯
     while (mazeData[playerPos.y + dy] && mazeData[playerPos.y + dy][playerPos.x + dx] !== 1) {
         playerPos.x += dx;
         playerPos.y += dy;
@@ -93,8 +90,8 @@ async function handleMove(key) {
             gemsFound++;
         }
 
-        drawMaze(); // 每走一格就重畫一次迷霧和角色
-        await sleep(30); // 滑行速度，數值越小越快
+        drawMaze();
+        await sleep(30); 
 
         if (mazeData[playerPos.y][playerPos.x] === 2) break;
     }
@@ -114,27 +111,30 @@ async function handleMove(key) {
             if (gemsFound < totalGems) {
                 alert(`你還沒集齊所有寶物！（目前：${gemsFound}/${totalGems}）`);
             } else {
-                setTimeout(() => {
-                    alert(`恭喜！你用了 ${steps} 步逃出迷宮！`);
-                    location.reload();
-                }, 100);
+                hasFinished = true; // 鎖定操作
+                document.getElementById('input-container').style.display = 'block'; // 顯示 ID 輸入框
+                alert(`成功逃脫！請在下方輸入 ID 記錄你的成績。`);
             }
         }
     }
-    
-    isMoving = false; // 移動結束，解鎖
+    isMoving = false;
 }
 
-// 修改按鈕呼叫，支援非同步
 async function moveByButton(direction) {
-    if (isMoving) return;
-    const keyMap = {
-        'up': 'ArrowUp',
-        'down': 'ArrowDown',
-        'left': 'ArrowLeft',
-        'right': 'ArrowRight'
-    };
+    if (isMoving || hasFinished) return;
+    const keyMap = { 'up': 'ArrowUp', 'down': 'ArrowDown', 'left': 'ArrowLeft', 'right': 'ArrowRight' };
     await handleMove(keyMap[direction]);
+}
+
+// 排行榜送出邏輯 (Firebase 串接預留)
+async function submitScore() {
+    const name = document.getElementById('player-name').value;
+    if (!name) return alert("請輸入冒險者 ID！");
+    
+    // 這裡將來放置 Firebase add 資料的代碼
+    console.log(`正在上傳成績... 名稱: ${name}, 步數: ${steps}`);
+    alert(`${name}，你的傳奇已被記錄！（目前為本地模擬，請等待 Firebase 串接）`);
+    location.reload(); 
 }
 
 window.addEventListener('keydown', (e) => {
@@ -145,5 +145,6 @@ window.addEventListener('keydown', (e) => {
     handleMove(e.key);
 });
 
+// 初始化
 drawMaze();
 console.log("%c 冒險者，按下 R 鍵可以重塑時空...", "color: #ff4444; font-style: italic;");
