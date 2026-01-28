@@ -108,6 +108,10 @@ body {
 }
 
 #status-board {
+    width: fit-content;
+    min-width: calc(var(--cell-size) * 15); /* 讓它跟迷宮寬度對齊 */
+    box-sizing: border-box;
+    text-align: center;
     font-size: 18px;
     margin-bottom: 15px;
     background: #444;
