@@ -38,16 +38,33 @@ body {
 }
 
 /* --- 手機版自適應縮放 --- */
-@media (max-width: 500px) {
+@media (max-width: 850px) { /* 建議將 500 改為 850，讓平板也能觸發 */
     :root {
-        /* 計算公式：(螢幕寬度 - 左右邊距 40px - 迷宮內邊距 20px) / 15 格 
-           這樣能保證 15 格剛好塞滿螢幕寬度，且兩邊留白
-        */
+        /* 計算公式：(螢幕寬度 - 左右間距) / 15 格 */
         --cell-size: calc((100vw - 60px) / 15);
     }
 
     #main-layout {
-        padding: 20px 10px; /* 縮小外部間距 */
+        flex-direction: column; /* 關鍵：讓排行榜與迷宮改為上下排列 */
+        align-items: center;    /* 水平置中 */
+        padding: 20px 10px; 
+        gap: 30px;
+    }
+
+    #side-panel {
+        width: 100%;            /* 讓排行榜寬度自動適應手機 */
+        max-width: 400px;       /* 但不要過寬 */
+        order: 2;               /* 讓排行榜排在迷宮（遊戲）下面 */
+        box-sizing: border-box;
+    }
+
+    #game-container {
+        order: 1;               /* 讓遊戲出現在上方 */
+    }
+
+    body {
+        height: auto;           /* 手機版內容變長，取消固定高度限制 */
+        padding: 20px 0;
     }
 }
 
