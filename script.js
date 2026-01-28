@@ -119,9 +119,17 @@ function moveByButton(direction) {
     handleMove(keyMap[direction]);
 }
 
+// --- 修改後的鍵盤監聽部分 ---
 window.addEventListener('keydown', (e) => {
+    // 如果按下的是 r 或 R，直接重新整理網頁
+    if (e.key === 'r' || e.key === 'R') {
+        location.reload();
+        return;
+    }
+    
+    // 原本的移動邏輯
     handleMove(e.key);
 });
 
-// 初始化
+// 確保你的 drawMaze() 和 handleMove() 函數保持不變
 drawMaze();
