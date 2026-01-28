@@ -1,3 +1,4 @@
+// 0:路, 1:牆, 2:門, 3:寶
 const mazeData = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 3, 1],
@@ -34,6 +35,7 @@ function drawMaze() {
             const cell = document.createElement('div');
             cell.className = 'cell';
 
+            // 漸層迷霧邏輯
             const dist = Math.sqrt(Math.pow(x - playerPos.x, 2) + Math.pow(y - playerPos.y, 2));
             const maxViewDistance = 4.5;
             let opacity = 1 - (dist / maxViewDistance);
@@ -67,7 +69,7 @@ function handleMove(key) {
     let nextY = playerPos.y;
     let moved = false;
 
-    // 滑動邏輯：檢查邊界與牆壁
+    // 滑動邏輯
     while (mazeData[nextY + dy] && mazeData[nextY + dy][nextX + dx] !== 1) {
         nextX += dx;
         nextY += dy;
@@ -107,7 +109,6 @@ function handleMove(key) {
     }
 }
 
-// 給按鈕用的函數
 function moveByButton(direction) {
     const keyMap = {
         'up': 'ArrowUp',
