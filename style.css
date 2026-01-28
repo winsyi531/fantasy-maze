@@ -184,6 +184,14 @@ body {
     text-shadow: 0 0 8px #00e5ff, 0 0 12px rgba(0, 229, 255, 0.5);
 }
 
+/* 幫門加上發光效果 */
+.door-glow {
+    color: #ff5722;
+    font-weight: bold;
+    /* 橙色外光暈 */
+    text-shadow: 0 0 8px #ff5722, 0 0 12px rgba(255, 87, 34, 0.5);
+}
+
 #controls { margin-top: 20px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
 .control-row { display: flex; gap: 10px; justify-content: center; }
 .ctrl-btn { width: 60px; height: 50px; background-color: #444; color: white; border: 2px solid #666; border-radius: 8px; font-size: 18px; cursor: pointer; transition: all 0.1s; }
