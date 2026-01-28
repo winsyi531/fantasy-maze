@@ -99,9 +99,16 @@ body {
     gap: 10px;
 }
 
+/* .control-row {
+    display: flex;
+    gap: 10px;
+} */
+
+/* 確保 control-row 是靠中心對齊，但內部的格子會自然對齊 */
 .control-row {
     display: flex;
     gap: 10px;
+    justify-content: center; /* 保持整組按鈕在畫面中央 */
 }
 
 .ctrl-btn {
@@ -133,4 +140,12 @@ body {
 .reset-btn:active {
     background-color: #834444;
     box-shadow: 0 0 10px #ff4444; /* 點擊時發出紅光 */
+}
+
+/* 讓佔位符透明且不顯示邊框 */
+.placeholder {
+    visibility: hidden; /* 佔據空間但不可見 */
+    pointer-events: none; /* 防止滑鼠點擊到它 */
+    border: none;
+    background: transparent;
 }
