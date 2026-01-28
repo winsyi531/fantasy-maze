@@ -86,9 +86,16 @@ window.addEventListener('keydown', (e) => {
     }
 
     if (moved) {
-        steps++; // 只要有移動，步數就 +1
+        steps++;
         playerPos.x = nextX;
         playerPos.y = nextY;
+        
+        // 觸發震動
+        const mazeElement = document.getElementById('maze');
+        mazeElement.classList.remove('shake-effect');
+        void mazeElement.offsetWidth; // 重新啟動動畫的技巧
+        mazeElement.classList.add('shake-effect');
+        
         drawMaze();
     }
 
