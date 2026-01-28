@@ -54,7 +54,26 @@
             </div>
         </div>
     </div>
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyC_RLzmsyUKarrfbbds0Z7hCgiczzLEXPQ",
+            authDomain: "fantasy-maze.firebaseapp.com",
+            projectId: "fantasy-maze",
+            storageBucket: "fantasy-maze.firebasestorage.app",
+            messagingSenderId: "852781429319",
+            appId: "1:852781429319:web:34db47d2416a1ef4863762",
+            measurementId: "G-DYXWQDGJ3J"
+        };
 
+    // 初始化 Firebase
+    firebase.initializeApp(firebaseConfig);
+  
+    // 建立資料庫連線變數，這會讓 script.js 可以使用它
+    const db = firebase.firestore();
+    </script>
     <script src="script.js"></script>
 </body>
 </html>
