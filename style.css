@@ -71,16 +71,12 @@ body {
     opacity: 0; /* 預設完全不可見 */
 }
 
-/* 角色視線範圍內的格子 */
-/* .cell.visible { */
-    /* background-color: #1a1a1a; /* 恢復背景色 */ 
-    /* color: #ffffff; /* 顯示文字 (牆、寶、門) */
-/* } */
-
+/* 寶物的顏色格式 */
 .gem {
     color: #00e5ff;
     font-weight: bold;
-    text-shadow: 0 0 5px #00e5ff;
+    /* 增加一點外光暈，讓它在黑暗中更明顯 */
+    text-shadow: 0 0 8px #00e5ff, 0 0 12px rgba(0, 229, 255, 0.5);
 }
 
 #instruction-area {
