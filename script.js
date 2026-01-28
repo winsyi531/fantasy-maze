@@ -1,28 +1,52 @@
-// 0:路, 1:牆, 2:門, 3:寶
-const mazeData = [
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 3, 1],
-    [1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1],
-    [1, 0, 1, 3, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1],
-    [1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1],
-    [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1],
-    [1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1],
-    [1, 0, 0, 0, 1, 3, 1, 0, 0, 0, 1, 0, 0, 0, 1],
-    [1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1],
-    [1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1],
-    [1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+// 關卡地圖資料庫 (目前設定 2 關)
+const levels = [
+    // Level 1: 原始地圖
+    [
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 3, 1],
+        [1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1],
+        [1, 0, 1, 3, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1],
+        [1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1],
+        [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1],
+        [1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1],
+        [1, 0, 0, 0, 1, 3, 1, 0, 0, 0, 1, 0, 0, 0, 1],
+        [1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+    ],
+    // Level 2: 隨機新地圖 (絕對有解、無孤島)
+    [
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 3, 1],
+        [1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1],
+        [1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1],
+        [1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1],
+        [1, 0, 0, 0, 1, 3, 0, 0, 0, 0, 1, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1],
+        [1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1],
+        [1, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
+        [1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1],
+        [1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
+        [1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+    ]
 ];
+
+let currentLevel = 0; 
+let mazeData = JSON.parse(JSON.stringify(levels[currentLevel])); // 深拷貝當前地圖
 
 let playerPos = { x: 1, y: 1 };
 let steps = 0;
 let gemsFound = 0;
 const totalGems = 3;
-let isMoving = false; // 動作鎖定
-let hasFinished = false; // 是否已達終點
+let isMoving = false;
+let hasFinished = false;
 
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -33,20 +57,22 @@ function drawMaze() {
 
     document.getElementById('step-count').textContent = steps;
     document.getElementById('gem-count').textContent = gemsFound;
+    
+    // 更新標題顯示
+    const levelTitle = document.getElementById('level-title');
+    if (levelTitle) levelTitle.textContent = `第 ${currentLevel + 1} 關`;
 
     for (let y = 0; y < mazeData.length; y++) {
         for (let x = 0; x < mazeData[y].length; x++) {
             const cell = document.createElement('div');
             cell.className = 'cell';
 
-            // 漸層迷霧邏輯
             const dist = Math.sqrt(Math.pow(x - playerPos.x, 2) + Math.pow(y - playerPos.y, 2));
             const maxViewDistance = 4.5;
             let opacity = 1 - (dist / maxViewDistance);
             if (opacity < 0) opacity = 0;
 
-            // 寶物微光處理：在黑暗中保持 0.15 的可見度
-            if ((mazeData[y][x]===3||mazeData[y][x]===2) && opacity < 0.15) {
+            if ((mazeData[y][x] === 3 || mazeData[y][x] === 2) && opacity < 0.15) {
                 opacity = 0.15;
             }
             
@@ -110,90 +136,111 @@ async function handleMove(key) {
         if (mazeData[playerPos.y][playerPos.x] === 2) {
             if (gemsFound < totalGems) {
                 alert(`你還沒集齊所有寶物！（目前：${gemsFound}/${totalGems}）`);
+                isMoving = false;
             } else {
-                hasFinished = true; // 鎖定操作
-                document.getElementById('input-container').style.display = 'block'; // 顯示 ID 輸入框
-                alert(`成功逃脫！請輸入 ID 記錄你的成績。`);
+                hasFinished = true;
+                handleLevelComplete();
             }
+            return;
         }
     }
     isMoving = false;
 }
 
-async function moveByButton(direction) {
-    if (isMoving || hasFinished) return;
-    const keyMap = { 'up': 'ArrowUp', 'down': 'ArrowDown', 'left': 'ArrowLeft', 'right': 'ArrowRight' };
-    await handleMove(keyMap[direction]);
+// 處理關卡完成的邏輯
+function handleLevelComplete() {
+    const isLastLevel = currentLevel === levels.length - 1;
+    let msg = `恭喜通過第 ${currentLevel + 1} 關！\n`;
+    
+    if (!isLastLevel) {
+        const choice = confirm(msg + "按下「確定」前往下一關，或「取消」記錄本關成績。");
+        if (choice) {
+            startNextLevel();
+        } else {
+            showInput();
+        }
+    } else {
+        alert(msg + "你已征服所有地牢！請留下你的傳奇紀錄。");
+        showInput();
+    }
 }
 
-// 排行榜送出邏輯 (Firebase 串接預留)
+function showInput() {
+    document.getElementById('input-container').style.display = 'block';
+}
+
+function startNextLevel() {
+    currentLevel++;
+    steps = 0;
+    gemsFound = 0;
+    playerPos = { x: 1, y: 1 };
+    mazeData = JSON.parse(JSON.stringify(levels[currentLevel]));
+    hasFinished = false;
+    isMoving = false;
+    drawMaze();
+    loadLeaderboard();
+}
+
+async function moveByButton(direction) {
+    await handleMove(direction === 'up' ? 'ArrowUp' : direction === 'down' ? 'ArrowDown' : direction === 'left' ? 'ArrowLeft' : 'ArrowRight');
+}
+
 async function submitScore() {
     const name = document.getElementById('player-name').value;
     if (!name) return alert("請輸入冒險者 ID！");
     
     try {
-        // 將成績儲存在雲端資料庫中名為 "leaderboard" 的集合裡
         await db.collection("leaderboard").add({
             name: name,
             steps: steps,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp() // 使用伺服器時間
+            level: currentLevel + 1, // 儲存關卡編號
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
         });
         
-        alert(`傳奇已載入石碑！冒險者 ${name}，後會有期。`);
+        alert(`傳奇已載入第 ${currentLevel + 1} 關石碑！後會有期。`);
         location.reload(); 
     } catch (error) {
-        console.error("資料上傳失敗：", error);
-        alert("時空震盪（上傳失敗），請稍後再試。");
+        console.error(error);
+        alert("上傳失敗。");
     }
 }
 
 window.addEventListener('keydown', (e) => {
-    if (e.key === 'r' || e.key === 'R') {
-        location.reload();
-        return;
-    }
+    if (e.key === 'r' || e.key === 'R') { location.reload(); return; }
     handleMove(e.key);
 });
 
-// 初始化
-drawMaze();
-console.log("%c 冒險者，按下 R 鍵可以重塑時空...", "color: #ff4444; font-style: italic;");
-
-// --- 自動抓取排行榜資料 ---
 async function loadLeaderboard() {
     const scoreList = document.getElementById('score-list');
     if (!scoreList) return;
 
     try {
-        // 從雲端抓取 "leaderboard" 集合，並依步數由少到多排序，只取前 5 名
+        // 關鍵：根據 level 進行查詢
         const snapshot = await db.collection("leaderboard")
+            .where("level", "==", currentLevel + 1)
             .orderBy("steps", "asc")
             .limit(5)
             .get();
 
-        // 如果資料庫是空的
         if (snapshot.empty) {
-            scoreList.innerHTML = '<li>尚無探險家留下紀錄</li>';
+            scoreList.innerHTML = `<li>第 ${currentLevel + 1} 關尚無紀錄</li>`;
             return;
         }
 
-        // 清空原本的「載入中...」文字
         scoreList.innerHTML = '';
-
-        // 將抓到的資料每一筆都做成一個 <li> 標籤
         snapshot.forEach(doc => {
             const data = doc.data();
             const li = document.createElement('li');
             li.style.padding = "5px 0";
             li.style.borderBottom = "1px ridge #333";
-            li.innerHTML = `<span style="color: #00e5ff;">${data.name}</span> - ${data.steps} 步`;
+            li.innerHTML = `<span>${data.name}</span> - ${data.steps} 步`;
             scoreList.appendChild(li);
         });
     } catch (error) {
-        console.error("抓取排行榜失敗：", error);
-        scoreList.innerHTML = '<li>石碑文字模糊不清（讀取失敗）</li>';
+        console.error(error);
+        scoreList.innerHTML = '<li>讀取失敗</li>';
     }
 }
 
-// 在網頁一啟動時就執行一次
+drawMaze();
 loadLeaderboard();
