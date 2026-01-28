@@ -10,16 +10,31 @@ body {
     font-family: "monospace"; /* 使用等寬字體 */
 }
 
+#status-board {
+    font-size: 18px;
+    margin-bottom: 15px;
+    background: #444;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: 1px solid #666;
+}
+
 #maze {
     display: grid;
-    /* 這裡假設你的橫向有 10 格，每格固定 30px */
-    grid-template-columns: repeat(10, 30px); 
-    /* 強制每一列的高度也是 30px，確保它是正方形 */
+    /* 這裡改成 15 格，每格 30px */
+    grid-template-columns: repeat(15, 30px); 
     grid-auto-rows: 30px; 
-    gap: 0; 
+    gap: 0;
     background: #1a1a1a;
     padding: 10px;
     border: 2px solid #555;
+}
+
+/* 讓「寶」閃爍一點金光 */
+.gem {
+    color: #00e5ff;
+    font-weight: bold;
+    text-shadow: 0 0 5px #00e5ff;
 }
 
 .cell {
