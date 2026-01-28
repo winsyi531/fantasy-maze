@@ -133,3 +133,5 @@ window.addEventListener('keydown', (e) => {
 
 // 確保你的 drawMaze() 和 handleMove() 函數保持不變
 drawMaze();
+
+console.log("%c 冒險者，按下 R 鍵可以重塑時空...", "color: #ff4444; font-style: italic;");
