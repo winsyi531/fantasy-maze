@@ -41,8 +41,16 @@ function drawMaze() {
 
             const dist = Math.sqrt(Math.pow(x - playerPos.x, 2) + Math.pow(y - playerPos.y, 2));
             const maxViewDistance = 4.5;
+            
+            // --- 修改後的透明度邏輯 ---
             let opacity = 1 - (dist / maxViewDistance);
             if (opacity < 0) opacity = 0;
+
+            // 特殊處理：如果是「寶」，且目前在迷霧中（opacity 為 0），給它 0.15 的微光
+            if (mazeData[y][x] === 3 && opacity < 0.15) {
+                opacity = 0.15; 
+            }
+            
             cell.style.opacity = opacity;
 
             if (x === playerPos.x && y === playerPos.y) {
