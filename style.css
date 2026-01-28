@@ -71,3 +71,29 @@ body {
     50% { transform: translate(-2px, -2px); }
 }
 .shake-effect { animation: shake 0.15s ease-in-out; }
+
+/* --- 角色滑行殘影特效 --- */
+@keyframes ghost-trail {
+    0% {
+        box-shadow: 
+            -5px 0 10px rgba(255, 235, 59, 0.6), 
+            -12px 0 15px rgba(255, 235, 59, 0.3);
+    }
+    50% {
+        box-shadow: 
+            -8px 0 15px rgba(255, 235, 59, 0.8), 
+            -18px 0 20px rgba(255, 235, 59, 0.4);
+    }
+    100% {
+        box-shadow: 
+            -5px 0 10px rgba(255, 235, 59, 0.6), 
+            -12px 0 15px rgba(255, 235, 59, 0.3);
+    }
+}
+
+/* 這是滑行時會被加上去的 class */
+.player-sliding {
+    animation: ghost-trail 0.2s infinite linear;
+    filter: brightness(1.3); /* 滑行時讓角色更亮一點 */
+    z-index: 99; /* 確保殘影不會被牆壁壓住 */
+}
