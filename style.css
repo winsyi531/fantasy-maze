@@ -1,25 +1,20 @@
-body {
-    background-color: #2c2c2c;
-    color: #ffffff;
+#maze {
+    display: inline-grid; /* 關鍵：改用網格佈局 */
+    /* 假設你的迷宮橫向有 10 格，每格固定 40px */
+    grid-template-columns: repeat(10, 40px); 
+    background: #1a1a1a;
+    padding: 20px;
+    border: 2px solid #555;
+    font-size: 24px;
+    text-align: center;
+}
+
+/* 讓每一格內的內容（牆、我、門）都居中對齊 */
+#maze div {
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    margin: 0;
-    /* 關鍵 1：指定等寬字體，確保每個中文字寬度一致 */
-    font-family: "Courier New", "Microsoft JhengHei", monospace; 
-}
-
-#maze {
-    /* 關鍵 2：使用 white-space: pre，保留所有空格，避免排版跑掉 */
-    white-space: pre; 
-    line-height: 1.5;
-    /* 關鍵 3：移除 letter-spacing，避免干擾對齊 */
-    font-size: 24px;
-    background: #1a1a1a;
-    padding: 30px;
-    border: 2px solid #555;
-    /* 設定固定寬高可以防止移動時容器「跳動」 */
-    min-width: 300px;
-    min-height: 300px;
 }
