@@ -58,8 +58,9 @@ body {
 .reset-btn { background: #5a2a2a; border-color: #834444; }
 .placeholder { visibility: hidden; }
 
-#input-container input { width: 100%; padding: 10px; margin: 10px 0; background: #333; color: white; border-radius: 4px; border: 1px solid #666; }
-#submit-btn { width: 100%; padding: 10px; background: #444; color: white; border: 1px solid #888; border-radius: 4px; }
+/* 修改後的通關輸入區樣式 */
+#input-container input {width: 100%; box-sizing: border-box; padding: 10px; margin: 10px 0; border-radius: 4px; border: 1px solid #666; background: #333; color: white; font-family: inherit; display: block;}
+#submit-btn {width: 100%; box-sizing: border-box; padding: 10px; cursor: pointer; background: #444; color: white; border: 1px solid #888; border-radius: 4px; transition: background 0.2s; display: block;}
 
 @keyframes character-glow {
     0%, 100% { text-shadow: 0 0 5px #fff; opacity: 1; }
