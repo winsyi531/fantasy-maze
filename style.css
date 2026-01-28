@@ -70,3 +70,26 @@ body {
     color: #aaa; /* 第二行字用灰色，看起來比較像提示 */
     font-size: 14px;
 }
+
+/* 定義呼吸燈動畫 */
+@keyframes character-glow {
+    0% { text-shadow: 0 0 5px #fff, 0 0 10px #ffeb3b; transform: scale(1); }
+    50% { text-shadow: 0 0 15px #fff, 0 0 25px #ffeb3b; transform: scale(1.1); }
+    100% { text-shadow: 0 0 5px #fff, 0 0 10px #ffeb3b; transform: scale(1); }
+}
+
+.player-active {
+    display: inline-block;
+    animation: character-glow 2s infinite ease-in-out;
+}
+
+.cell {
+    /* 讓原本的格子都變暗 */
+    opacity: 0.1; 
+    transition: opacity 0.5s; /* 讓光影變化平滑一點 */
+}
+
+.cell.visible {
+    /* 被照亮的格子 */
+    opacity: 1;
+}
