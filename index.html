@@ -2,6 +2,7 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>奇幻迷宮逃脫</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -30,6 +31,27 @@
         <div id="instruction-area">
             <div class="message-line1">找出所有的「寶」，並前往「門」逃脫！</div>
             <div class="message-line2">使用鍵盤或點擊按鈕，控制「我」逃出迷宮</div>
+        </div>
+
+        <hr style="border: 0.5px solid #444; width: 100%; margin: 20px 0;">
+
+        <div id="leaderboard-section">
+            <div id="input-container" style="display: none;">
+                <h3 style="font-size: 16px; color: #ffeb3b;">🏆 進入英雄榜！</h3>
+                <input type="text" id="player-name" placeholder="輸入你的 ID" maxlength="10" 
+                       style="padding: 5px; border-radius: 4px; border: 1px solid #666; background: #333; color: white;">
+                <button onclick="submitScore()" 
+                        style="padding: 5px 15px; cursor: pointer; background: #444; color: white; border: 1px solid #888; border-radius: 4px;">
+                    送出
+                </button>
+            </div>
+
+            <div id="high-scores" style="margin-top: 15px;">
+                <h4 style="margin-bottom: 5px; color: #aaa;">--- 全球英雄榜 (Top 5) ---</h4>
+                <ul id="score-list" style="list-style: none; padding: 0; font-size: 14px; color: #eee;">
+                    <li>冒險者載入中...</li>
+                </ul>
+            </div>
         </div>
     </div>
 
