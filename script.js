@@ -67,6 +67,7 @@ function handleMove(key) {
     let nextY = playerPos.y;
     let moved = false;
 
+    // 滑動邏輯：檢查邊界與牆壁
     while (mazeData[nextY + dy] && mazeData[nextY + dy][nextX + dx] !== 1) {
         nextX += dx;
         nextY += dy;
@@ -85,9 +86,11 @@ function handleMove(key) {
         playerPos.y = nextY;
 
         const mazeElement = document.getElementById('maze');
-        mazeElement.classList.remove('shake-effect');
-        void mazeElement.offsetWidth; 
-        mazeElement.classList.add('shake-effect');
+        if (mazeElement) {
+            mazeElement.classList.remove('shake-effect');
+            void mazeElement.offsetWidth; 
+            mazeElement.classList.add('shake-effect');
+        }
 
         drawMaze();
 
@@ -104,6 +107,7 @@ function handleMove(key) {
     }
 }
 
+// 給按鈕用的函數
 function moveByButton(direction) {
     const keyMap = {
         'up': 'ArrowUp',
@@ -118,4 +122,5 @@ window.addEventListener('keydown', (e) => {
     handleMove(e.key);
 });
 
+// 初始化
 drawMaze();
