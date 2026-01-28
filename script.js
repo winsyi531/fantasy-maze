@@ -113,7 +113,7 @@ async function handleMove(key) {
             } else {
                 hasFinished = true; // 鎖定操作
                 document.getElementById('input-container').style.display = 'block'; // 顯示 ID 輸入框
-                alert(`成功逃脫！請在下方輸入 ID 記錄你的成績。`);
+                alert(`成功逃脫！請輸入 ID 記錄你的成績。`);
             }
         }
     }
