@@ -123,3 +123,14 @@ body {
     transform: translateY(2px);
     box-shadow: 0 0 10px #ffeb3b; /* 點擊時發出微弱黃光 */
 }
+
+/* 點擊時恢復初始 */
+.reset-btn {
+    background-color: #5a2a2a; /* 暗紅色，代表危險或重置 */
+    border-color: #834444;
+}
+
+.reset-btn:active {
+    background-color: #834444;
+    box-shadow: 0 0 10px #ff4444; /* 點擊時發出紅光 */
+}
