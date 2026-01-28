@@ -46,7 +46,7 @@ function drawMaze() {
             if (opacity < 0) opacity = 0;
 
             // 寶物微光處理：在黑暗中保持 0.15 的可見度
-            if (mazeData[y][x] === 3 && opacity < 0.15) {
+            if ((mazeData[y][x]===3||mazeData[y][x]===2) && opacity < 0.15) {
                 opacity = 0.15;
             }
             
