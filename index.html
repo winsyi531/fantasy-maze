@@ -14,9 +14,20 @@
 
         <div id="maze"></div>
 
+        <div id="controls">
+            <div class="control-row">
+                <button class="ctrl-btn" onclick="moveByButton('up')">上</button>
+            </div>
+            <div class="control-row">
+                <button class="ctrl-btn" onclick="moveByButton('left')">左</button>
+                <button class="ctrl-btn" onclick="moveByButton('down')">下</button>
+                <button class="ctrl-btn" onclick="moveByButton('right')">右</button>
+            </div>
+        </div>
+
         <div id="instruction-area">
             <div class="message-line1">找出所有的「寶」，並前往「門」逃脫！</div>
-            <div class="message-line2">使用鍵盤上下左右，控制「我」逃出迷宮</div>
+            <div class="message-line2">使用鍵盤或點擊按鈕，控制「我」逃出迷宮</div>
         </div>
     </div>
 
