@@ -1,24 +1,24 @@
-// 0 代表路，1 代表「牆」，2 代表出口「門」
 const mazeData = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 0, 0, 0, 1, 0, 0, 0, 0, 1],
     [1, 0, 1, 0, 1, 0, 1, 1, 0, 1],
     [1, 0, 1, 0, 0, 0, 0, 1, 0, 1],
-    [1, 0, 1, 1, 1, 1, 0, 1, 0, 2], // 2 是出口
+    [1, 0, 1, 1, 1, 1, 0, 1, 0, 2],
     [1, 0, 0, 0, 0, 1, 0, 1, 0, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ];
 
-let playerPos = { x: 1, y: 1 }; // 「我」的起始位置
+let playerPos = { x: 1, y: 1 };
 
 function drawMaze() {
     const mazeElement = document.getElementById('maze');
-    mazeElement.innerHTML = ''; // 清空內容
+    mazeElement.innerHTML = ''; // 清空原本的迷宮
 
     for (let y = 0; y < mazeData.length; y++) {
         for (let x = 0; x < mazeData[y].length; x++) {
-            const cell = document.createElement('div'); // 每一格都是一個 div
-            
+            const cell = document.createElement('div');
+            cell.className = 'cell';
+
             if (x === playerPos.x && y === playerPos.y) {
                 cell.innerHTML = '<span style="color: #ffeb3b; font-weight: bold;">我</span>';
             } else if (mazeData[y][x] === 1) {
@@ -26,7 +26,7 @@ function drawMaze() {
             } else if (mazeData[y][x] === 2) {
                 cell.innerHTML = '<span style="color: #ff5722;">門</span>';
             } else {
-                cell.textContent = ''; // 空地不需要放空格，Grid 會撐開
+                cell.textContent = ''; // 空地不需要放任何東西
             }
             
             mazeElement.appendChild(cell);
