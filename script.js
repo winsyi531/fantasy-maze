@@ -1,17 +1,24 @@
 // 初始化關卡：優先讀取進度，若無則為 0
 let currentLevel = parseInt(localStorage.getItem('mazeCurrentLevel')) || 0;
+
+// 防止關卡資料還沒讀取到 levels 就報錯
+if (typeof levels !== 'undefined' && !levels[currentLevel]) currentLevel = 0;
+
 let mazeData = JSON.parse(JSON.stringify(levels[currentLevel]));
 
 let playerPos = { x: 1, y: 1 };
 let steps = 0;
 let gemsFound = 0;
-const totalGems = 0;
+
+// --- 修正點 1: totalGems 必須是 let，否則無法更新 ---
+let totalGems = 0; 
+
 let isMoving = false;
 let hasFinished = false;
 
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-// 新增：計算當前地圖寶藏總數的函數
+// 計算當前地圖寶藏總數的函數
 function countTotalGems(data) {
     let count = 0;
     for (let y = 0; y < data.length; y++) {
@@ -28,7 +35,10 @@ function resetCurrentLevel() {
     gemsFound = 0;
     playerPos = { x: 1, y: 1 };
     mazeData = JSON.parse(JSON.stringify(levels[currentLevel]));
-    totalGems = countTotalGems(mazeData);
+    
+    // --- 修正點 2: 重置時重新計算寶藏總數 ---
+    totalGems = countTotalGems(mazeData); 
+    
     hasFinished = false;
     isMoving = false;
     document.getElementById('input-container').style.display = 'none';
@@ -46,7 +56,6 @@ function updateLevelButtons() {
         btnPrev.style.opacity = btnPrev.disabled ? "0.3" : "1";
         btnNext.style.opacity = btnNext.disabled ? "0.3" : "1";
     });
-
 }
 
 function changeLevel(delta) {
@@ -65,9 +74,11 @@ function drawMaze() {
     mazeElement.innerHTML = '';
     
     document.getElementById('step-count').textContent = steps;
-    // document.getElementById('gem-count').textContent = gemsFound;
+    
+    // --- 修正點 3: 顯示正確的寶藏進度 ---
     const gemDisplay = document.getElementById('gem-count');
     if (gemDisplay) gemDisplay.textContent = `${gemsFound}/${totalGems}`;
+    
     const levelTitle = document.getElementById('level-title');
     if (levelTitle) levelTitle.textContent = `第 ${currentLevel + 1} 關`;
     updateLevelButtons();
@@ -108,13 +119,26 @@ async function handleMove(key) {
     else return;
     
     isMoving = true;
+
+    // 啟用殘影特效
+    let playerElement = document.querySelector('.player-active');
+    if (playerElement) playerElement.classList.add('player-sliding');
+
     while (mazeData[playerPos.y + dy] && mazeData[playerPos.y + dy][playerPos.x + dx] !== 1) {
         playerPos.x += dx; playerPos.y += dy;
         if (mazeData[playerPos.y][playerPos.x] === 3) { mazeData[playerPos.y][playerPos.x] = 0; gemsFound++; }
         drawMaze();
+
+        playerElement = document.querySelector('.player-active');
+        if (playerElement) playerElement.classList.add('player-sliding');
+
         await sleep(30); 
         if (mazeData[playerPos.y][playerPos.x] === 2) break;
     }
+
+    // 移除殘影特效
+    playerElement = document.querySelector('.player-active');
+    if (playerElement) playerElement.classList.remove('player-sliding');
 
     steps++;
     const mazeElement = document.getElementById('maze');
@@ -182,5 +206,7 @@ async function loadLeaderboard() {
     } catch (error) { scoreList.innerHTML = '<li>讀取失敗</li>'; }
 }
 
+// --- 修正點 4: 初始化時計算一次總數 ---
+totalGems = countTotalGems(mazeData); 
 drawMaze();
 loadLeaderboard();
