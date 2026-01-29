@@ -5,11 +5,22 @@ let mazeData = JSON.parse(JSON.stringify(levels[currentLevel]));
 let playerPos = { x: 1, y: 1 };
 let steps = 0;
 let gemsFound = 0;
-const totalGems = 3;
+const totalGems = 0;
 let isMoving = false;
 let hasFinished = false;
 
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+// 新增：計算當前地圖寶藏總數的函數
+function countTotalGems(data) {
+    let count = 0;
+    for (let y = 0; y < data.length; y++) {
+        for (let x = 0; x < data[y].length; x++) {
+            if (data[y][x] === 3) count++;
+        }
+    }
+    return count;
+}
 
 // R 鍵功能改為只重置本關
 function resetCurrentLevel() {
@@ -17,6 +28,7 @@ function resetCurrentLevel() {
     gemsFound = 0;
     playerPos = { x: 1, y: 1 };
     mazeData = JSON.parse(JSON.stringify(levels[currentLevel]));
+    totalGems = countTotalGems(mazeData);
     hasFinished = false;
     isMoving = false;
     document.getElementById('input-container').style.display = 'none';
@@ -53,7 +65,9 @@ function drawMaze() {
     mazeElement.innerHTML = '';
     
     document.getElementById('step-count').textContent = steps;
-    document.getElementById('gem-count').textContent = gemsFound;
+    // document.getElementById('gem-count').textContent = gemsFound;
+    const gemDisplay = document.getElementById('gem-count');
+    if (gemDisplay) gemDisplay.textContent = `${gemsFound}/${totalGems}`;
     const levelTitle = document.getElementById('level-title');
     if (levelTitle) levelTitle.textContent = `第 ${currentLevel + 1} 關`;
     updateLevelButtons();
