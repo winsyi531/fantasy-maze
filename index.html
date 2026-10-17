@@ -13,22 +13,6 @@
                 <button onclick="changeLevel(-1)">上一個關卡</button>
                 <button onclick="changeLevel(1)">下一個關卡</button>
             </div>
-
-            <div id="leaderboard-section">
-                <div id="high-scores">
-                    <h4>🏆 英雄榜 (Top 5)</h4>
-                    <ul id="score-list">
-                        <li>冒險者載入中...</li>
-                    </ul>
-                </div>
-
-                <div id="input-container" style="display: none;">
-                    <hr style="border: 0.5px solid #444; margin: 15px 0;">
-                    <h3 style="font-size: 16px; color: #ffeb3b;">進入英雄榜！</h3>
-                    <input type="text" id="player-name" placeholder="輸入 ID" maxlength="10">
-                    <button id="submit-btn" onclick="submitScore()">送出</button>
-                </div>
-            </div>
         </div>
 
         <div id="game-container">
@@ -63,22 +47,6 @@
             </div>
         </div>
     </div>
-    
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-    <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyC_RLzmsyUKarrfbbds0Z7hCgiczzLEXPQ",
-            authDomain: "fantasy-maze.firebaseapp.com",
-            projectId: "fantasy-maze",
-            storageBucket: "fantasy-maze.firebasestorage.app",
-            messagingSenderId: "852781429319",
-            appId: "1:852781429319:web:34db47d2416a1ef4863762",
-            measurementId: "G-DYXWQDGJ3J"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-    </script>
     <script src="maps.js"></script>
     <script src="script.js"></script>
 </body>

@@ -41,7 +41,6 @@ function resetCurrentLevel() {
     
     hasFinished = false;
     isMoving = false;
-    document.getElementById('input-container').style.display = 'none';
     drawMaze();
 }
 
@@ -64,7 +63,6 @@ function changeLevel(delta) {
         currentLevel = nextLvl;
         localStorage.setItem('mazeCurrentLevel', currentLevel); // 儲存進度
         resetCurrentLevel();
-        loadLeaderboard();
     }
 }
 
@@ -158,27 +156,12 @@ async function handleMove(key) {
 }
 
 function handleLevelComplete() {
-    const choice = confirm(`恭喜通過第 ${currentLevel + 1} 關！\n是否要留下英雄 ID？\n(確定: 留下ID / 取消: 直接挑戰下一關)`);
-    if (choice) {
-        document.getElementById('input-container').style.display = 'block';
+    if (currentLevel < levels.length - 1) {
+        alert(`恭喜通過第 ${currentLevel + 1} 關！（${steps} 步）`);
+        changeLevel(1);
     } else {
-        if (currentLevel < levels.length - 1) changeLevel(1);
-        else alert("已征服所有關卡！");
+        alert(`恭喜通過第 ${currentLevel + 1} 關！（${steps} 步）\n已征服所有關卡！`);
     }
-}
-
-async function submitScore() {
-    const name = document.getElementById('player-name').value;
-    if (!name) return alert("請輸入冒險者 ID！");
-    try {
-        await db.collection("leaderboard").add({
-            name: name, steps: steps, level: currentLevel + 1,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp()
-        });
-        alert(`傳奇已載入！`);
-        if (currentLevel < levels.length - 1) changeLevel(1);
-        else location.reload();
-    } catch (error) { alert("上傳失敗"); }
 }
 
 async function moveByButton(direction) {
@@ -190,23 +173,7 @@ window.addEventListener('keydown', (e) => {
     handleMove(e.key);
 });
 
-async function loadLeaderboard() {
-    const scoreList = document.getElementById('score-list');
-    if (!scoreList) return;
-    try {
-        const snapshot = await db.collection("leaderboard")
-            .where("level", "==", currentLevel + 1)
-            .orderBy("steps", "asc").limit(5).get();
-        if (snapshot.empty) { scoreList.innerHTML = `<li>第 ${currentLevel + 1} 關尚無紀錄</li>`; return; }
-        scoreList.innerHTML = '';
-        snapshot.forEach(doc => {
-            const data = doc.data();
-            scoreList.innerHTML += `<li><span>${data.name}</span> - ${data.steps} 步</li>`;
-        });
-    } catch (error) { scoreList.innerHTML = '<li>讀取失敗</li>'; }
-}
 
 // --- 修正點 4: 初始化時計算一次總數 ---
 totalGems = countTotalGems(mazeData); 
 drawMaze();
-loadLeaderboard();
