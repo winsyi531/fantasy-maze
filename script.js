@@ -15,6 +15,14 @@ let totalGems = 0;
 
 let isMoving = false;
 let hasFinished = false;
+let moveToken = 0; // 每次重置關卡就 +1，讓還在滑行中的舊迴圈自動中止
+
+// 超出地圖範圍一律視為牆，避免角色從邊界的門滑出地圖
+function isBlocked(x, y) {
+    return y < 0 || y >= mazeData.length ||
+           x < 0 || x >= mazeData[y].length ||
+           mazeData[y][x] === 1;
+}
 
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -31,6 +39,7 @@ function countTotalGems(data) {
 
 // R 鍵功能改為只重置本關
 function resetCurrentLevel() {
+    moveToken++;
     steps = 0;
     gemsFound = 0;
     playerPos = { x: 1, y: 1 };
@@ -117,12 +126,13 @@ async function handleMove(key) {
     else return;
     
     isMoving = true;
+    const myToken = moveToken;
 
     // 啟用殘影特效
     let playerElement = document.querySelector('.player-active');
     if (playerElement) playerElement.classList.add('player-sliding');
 
-    while (mazeData[playerPos.y + dy] && mazeData[playerPos.y + dy][playerPos.x + dx] !== 1) {
+    while (!isBlocked(playerPos.x + dx, playerPos.y + dy)) {
         playerPos.x += dx; playerPos.y += dy;
         if (mazeData[playerPos.y][playerPos.x] === 3) { mazeData[playerPos.y][playerPos.x] = 0; gemsFound++; }
         drawMaze();
@@ -131,6 +141,7 @@ async function handleMove(key) {
         if (playerElement) playerElement.classList.add('player-sliding');
 
         await sleep(30); 
+        if (myToken !== moveToken) return; // 滑行途中按了 R 或換關，放棄這次移動
         if (mazeData[playerPos.y][playerPos.x] === 2) break;
     }
 
